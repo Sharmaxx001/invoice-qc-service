@@ -1,0 +1,29 @@
+{
+    "extracted": {
+        "invoice_id": "AUFNR234953",
+        "invoice_date": "",
+        "buyer_name": "Softwareunternehmen",
+        "seller_name": "Softwareunternehmen",
+        "total_amount": 216.0,
+        "tax_amount": 41.04,
+        "total_with_tax": 257.04,
+        "currency": "EUR",
+        "line_items": []
+    },
+    "result": {
+        "invoice_id": "AUFNR234953",
+        "valid": false,
+        "errors": [
+            "missing_field:invoice_date",
+            "bad_format:invoice_date"
+        ]
+    },
+    "summary": {
+        "total_invoices": 1,
+        "valid_invoices": 0,
+        "invalid_invoices": 1,
+        "missing_count_by_field": {
+            "invoice_date": 1
+        }
+    }
+}

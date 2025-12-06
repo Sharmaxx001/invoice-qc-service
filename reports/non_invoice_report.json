@@ -1,0 +1,30 @@
+{
+    "result": {
+        "invoice_id": null,
+        "valid": false,
+        "errors": [
+            "missing_field:invoice_id",
+            "missing_field:invoice_date",
+            "missing_field:buyer_name",
+            "missing_field:seller_name",
+            "missing_field:total_amount",
+            "missing_field:tax_amount",
+            "missing_field:total_with_tax",
+            "bad_format:invoice_date"
+        ]
+    },
+    "summary": {
+        "total_invoices": 1,
+        "valid_invoices": 0,
+        "invalid_invoices": 1,
+        "missing_count_by_field": {
+            "invoice_id": 1,
+            "invoice_date": 1,
+            "buyer_name": 1,
+            "seller_name": 1,
+            "total_amount": 1,
+            "tax_amount": 1,
+            "total_with_tax": 1
+        }
+    }
+}

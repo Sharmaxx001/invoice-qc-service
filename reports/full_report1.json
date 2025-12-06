@@ -1,0 +1,29 @@
+{
+    "extracted": {
+        "invoice_id": "AUFNR34343",
+        "invoice_date": "",
+        "buyer_name": "Beispielname Unternehmen",
+        "seller_name": "Beispielname Unternehmen",
+        "total_amount": 64.0,
+        "tax_amount": 12.16,
+        "total_with_tax": 76.16,
+        "currency": "EUR",
+        "line_items": []
+    },
+    "result": {
+        "invoice_id": "AUFNR34343",
+        "valid": false,
+        "errors": [
+            "missing_field:invoice_date",
+            "bad_format:invoice_date"
+        ]
+    },
+    "summary": {
+        "total_invoices": 1,
+        "valid_invoices": 0,
+        "invalid_invoices": 1,
+        "missing_count_by_field": {
+            "invoice_date": 1
+        }
+    }
+}

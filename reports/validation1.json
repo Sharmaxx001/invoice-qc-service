@@ -1,0 +1,18 @@
+{
+    "result": {
+        "invoice_id": "AUFNR34343",
+        "valid": false,
+        "errors": [
+            "missing_field:invoice_date",
+            "bad_format:invoice_date"
+        ]
+    },
+    "summary": {
+        "total_invoices": 1,
+        "valid_invoices": 0,
+        "invalid_invoices": 1,
+        "missing_count_by_field": {
+            "invoice_date": 1
+        }
+    }
+}

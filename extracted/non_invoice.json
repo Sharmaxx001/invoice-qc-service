@@ -1,0 +1,11 @@
+{
+    "invoice_id": null,
+    "invoice_date": "",
+    "buyer_name": null,
+    "seller_name": null,
+    "total_amount": null,
+    "tax_amount": null,
+    "total_with_tax": null,
+    "currency": "EUR",
+    "line_items": []
+}
