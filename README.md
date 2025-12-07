@@ -3,272 +3,208 @@
 A lightweight Invoice Extraction & Validation system built with Python + FastAPI.
 Extracts invoice fields from PDFs, validates them with rule-based checks, and generates structured JSON reports.
 
-🚀 Features
+⭐ 1. Overview
 
-PDF Extraction → invoice_id, buyer/seller, totals, tax, currency, line items
+This project implements a complete backend pipeline for Invoice Quality Control (Invoice-QC).
+It simulates a real-world system used in Accounts Payable automation workflows.
 
-Rule-Based Validation → missing fields, format checks, total mismatch, etc.
+✔ What this project does
 
-FastAPI Endpoints for JSON validation & PDF upload
+- Extracts structured invoice data from PDF files
+- Validates invoice fields using rule-based business logic
+- Provides a CLI tool (extract, validate, full-run)
+- Exposes a REST API (FastAPI) for automation
+- Generates summary validation reports
 
-CLI Tool for quick extraction + validation
+⭐ 2. Schema & Validation Design
 
-Structured JSON Reports
+📌 Invoice Fields Chosen
 
-Clean folder structure suitable for production
+| Field            | Description                          |
+| ---------------- | ------------------------------------ |
+| `invoice_id`     | Unique identifier for the invoice    |
+| `invoice_date`   | Date in YYYY-MM-DD format            |
+| `buyer_name`     | Name of the buyer company            |
+| `seller_name`    | Name of the seller company           |
+| `total_amount`   | Subtotal before tax                  |
+| `tax_amount`     | Tax value                            |
+| `total_with_tax` | Grand total after tax                |
+| `currency`       | 3-letter ISO code (USD/EUR/INR etc.) |
+| `line_items`     | List of purchased items              |
 
-🛠️ Tech Stack
+🧮 Validation Rules Implemented
 
-Python 3
+| Rule Type           | Description                                                 | Rationale                       |
+| ------------------- | ----------------------------------------------------------- | ------------------------------- |
+| Required fields     | invoice_id, buyer_name, seller_name, total_amount, currency | Minimum required for processing |
+| Date format check   | Must be valid ISO date                                      | Avoids corrupted formats        |
+| Numeric validation  | Amounts must be ≥ 0                                         | Prevents invalid totals         |
+| Business rule       | `total_amount ≈ sum(line_total)`                            | Ensures item consistency        |
+| Tax rule            | `total_with_tax = total_amount + tax_amount`                | Prevents mismatched totals      |
+| Line item structure | Description, quantity, unit_price, line_total               | Ensures clean structured data   |
 
-FastAPI
+✔ Output of validation
 
-pdfplumber
+Each invoice returns:
+{
+"invoice_id": "INV123",
+"valid": false,
+"errors": [
+"missing_field:buyer_name",
+"business_rule:total_mismatch"
+]
+}
 
-pydantic
+⭐ 3. Architecture
 
-uvicorn
+📁 Folder Structure
 
-argparse (CLI)
+invoice-qc-service/
+├── src/
+│ ├── extractor/
+│ │ └── extractor.py # Extracts invoice fields from PDF
+│ ├── validator/
+│ │ └── validator.py # Validation engine
+│ ├── api.py # FastAPI service
+│ ├── cli.py # CLI commands
+│ ├── manual_extractor_test.py
+│ └── manual_validator_test.py
+│
+├── data/
+│ └── sample_pdfs/
+│
+├── extracted/ # Extracted JSON files
+├── reports/ # Validation reports
+└── README.md
 
-📂 Project Structure
-src/
-├── extractor/ # PDF → structured data
-├── validator/ # Rule-based validation
-├── api.py # FastAPI service
-invoice_qc_cli.py # CLI tool
-reports/ # Generated reports
-extracted/ # Extracted invoice JSON
-requirements.txt
+⭐ 4. System Flow Diagram
 
-⚙️ Installation
-pip install -r requirements.txt
+Mermaid Flow Diagram
 
-▶️ Running the API
+flowchart LR
+A[PDF Files] --> B[Extraction Engine]
+B --> C[Extracted JSON]
+C --> D[Validation Engine]
+D --> E[Results + Errors]
+E --> F[Reports / CLI Output]
+C --> G[API Response - Extract]
+D --> H[API Response - Validate]
+
+⭐ 5. Setup & Installation
+🐍 Python Version
+Python 3.11.x (project tested on this version)
+
+📦 Create Virtual Environment
+py -3.11 -m venv venv
+.\venv\Scripts\activate
+
+📚 Install Dependencies
+pip install fastapi==0.110.0
+pip install uvicorn==0.30.0
+pip install pydantic==2.7.1
+pip install pydantic-settings==2.2.1
+pip install pdfplumber==0.7.6
+pip install python-dateutil==2.8.2
+pip install pandas==2.2.0
+pip install click==8.1.7
+pip install python-dotenv==1.0.0
+pip install python-multipart
+pip install pytest==7.4.0
+
+⭐ 6. Running the Application
+
+▶ Start FastAPI Server
 uvicorn src.api:app --reload
+UI:
+👉 http://127.0.0.1:8000/docs
 
-Docs auto-generated at:
+🧪 Run CLI Commands
+1️⃣ Extract from PDF
+python -m src.cli extract data/sample_pdfs/sample.pdf extracted/output.json
 
-http://127.0.0.1:8000/docs
+2️⃣ Validate extracted JSON
+python -m src.cli validate extracted/output.json reports/validation.json
 
-🧪 CLI Usage
-Extract PDF → JSON
-python invoice_qc_cli.py extract --pdf data/sample_pdfs/sample_pdf_1.pdf --output extracted/output1.json
+3️⃣ Full pipeline (extract + validate)
+python -m src.cli full-run data/sample_pdfs/sample.pdf reports/full_report.json
 
-Validate JSON
-python invoice_qc_cli.py validate --json extracted/output1.json
-
-Full Pipeline (Extract + Validate + Save Report)
-python invoice_qc_cli.py full-run --pdf data/sample_pdfs/sample_pdf_1.pdf --report reports/full_report1.json
-
-📘 API Endpoints
-POST /validate-json
-
-Validate a list of invoice JSON objects.
-
-POST /extract-and-validate-pdf
-
-Upload PDF → extract → validate → return full result.
-
+⭐ 7. API Usage
+✔ Health Check
 GET /health
+{ "status": "ok", "env": "local", "version": "v1" }
 
-Service heartbeat.
-
-✔️ Validation Rules
-
-Required field checks
-
-Date format checks
-
-Currency format checks
-
-Total consistency:
-
-total_amount + tax_amount == total_with_tax
-
-Missing field detection
-
-Summary generation
-
-📝 Sample Output
+✔ Validate JSON
+POST /validate-json
+Request body:
+[
 {
-"invoice_id": "AUFNR123456",
-"valid": true,
-"errors": []
+"invoice_id": "INV123",
+"buyer_name": "ABC Corp",
+"seller_name": "XYZ Ltd",
+"total_amount": 200,
+"currency": "USD"
 }
+]
 
-🎯 What This Project Demonstrates
+✔ Extract + Validate PDF
+POST /extract-and-validate-pdf (multipart/form-data)
 
-Designing modular Python services
+Upload a PDF → response includes:
 
-Building extraction + validation pipelines
+- Extracted fields
+- Validation result
+- Summary statistics
 
-API engineering
+⭐ 8. AI Usage Notes
 
-Clean code, structure & documentation
+AI tools (ChatGPT / Claude) were used responsibly for:
 
-CLI tool design
+- Improving documentation clarity
+- Generating sample data models
+- Debugging extraction and validation logic
+- Refining README structure
 
-<<<<<<< HEAD
-JSON handling
-=======
+However:
 
-Response (shape):
+- All core code (extractor, validator, CLI, API) was understood and written by me
+- AI suggestions were manually validated, corrected, and adapted
+- No AI-generated code was used blindly
 
-{
-  "results": [
-    {
-      "invoice_id": "AUFNR123456",
-      "valid": true,
-      "errors": []
-    }
-  ],
-  "summary": {
-    "total_invoices": 1,
-    "valid_invoices": 1,
-    "invalid_invoices": 0,
-    "missing_count_by_field": {}
-  }
-}
+⭐ 9. Assumptions & Limitations
 
-3. Upload PDF → Extract + Validate
+✔ Assumptions - PDFs follow reasonable invoice formatting - Line items are either simple or absent - No OCR required for handwritten or extremely noisy PDFs
 
-Endpoint:
+✔ Known Limitations
 
-POST /extract-and-validate-pdf
-Content-Type: multipart/form-data
+| Limitation                   | Explanation                       |
+| ---------------------------- | --------------------------------- |
+| Limited line-item extraction | Not fully layout-aware            |
+| No database                  | Everything is file-based          |
+| No authentication            | API is open locally               |
+| Non-invoice PDFs             | Produce many missing-field errors |
+| No UI / frontend             | Only Swagger UI provided          |
 
+⭐ 10. Future Improvements
 
-Form field:
+- Build a React/Next.js UI Dashboard
+- Add PostgreSQL database for persistence
+- Improve line-item extraction (OCR + layout algorithms)
+- Add authentication / JWT
+- Add background processing with Celery
 
-file: PDF file to validate
+PROJECT SCREENSHOTS:
 
-Example (curl):
+1. extraction:
+   invoice-qc-service\screenshots\cli_extract.png.jpg
 
-curl -X POST "http://127.0.0.1:8000/extract-and-validate-pdf" ^
-  -H "accept: application/json" ^
-  -H "Content-Type: multipart/form-data" ^
-  -F "file=@data/sample_pdfs/sample_pdf_1.pdf"
+2. Full working:
+   invoice-qc-service\screenshots\cli-fullpipeline.png.jpg
 
+3. API CALL:
+   invoice-qc-service\screenshots\pdf_extarction.jpg
 
-Response (shape):
-
-{
-  "extracted": {
-    "invoice_id": "AUFNR123456",
-    "invoice_date": "",
-    "buyer_name": "Softwareunternehmen",
-    "seller_name": "Unternehmen für Computerteile",
-    "total_amount": 216.0,
-    "tax_amount": 41.04,
-    "total_with_tax": 257.04,
-    "currency": "EUR",
-    "line_items": []
-  },
-  "result": {
-    "invoice_id": "AUFNR123456",
-    "valid": true,
-    "errors": []
-  },
-  "summary": {
-    "total_invoices": 1,
-    "valid_invoices": 1,
-    "invalid_invoices": 0,
-    "missing_count_by_field": {}
-  }
-}
-
-
-(The exact values will depend on the PDF.)
-
-💻 CLI Usage
-
-All commands are run from project root with the venv active.
-
-1. Extract from PDF
-python -m src.cli extract data/sample_pdfs/sample_pdf_1.pdf extracted/output1.json
-
-
-This:
-
-Reads the given PDF
-
-Extracts invoice fields
-
-Saves JSON to extracted/output1.json
-
-2. Validate an Extracted JSON
-python -m src.cli validate extracted/output1.json reports/validation1.json
-
-
-This:
-
-Loads the JSON
-
-Runs all validation rules
-
-Saves a report to reports/validation1.json
-
-3. Full Run: Extract + Validate
-python -m src.cli full-run data/sample_pdfs/sample_pdf_1.pdf reports/full_report1.json
-
-
-This:
-
-Extracts from PDF
-
-Validates extracted invoice
-
-Writes a combined report to reports/full_report1.json
-
-📊 Example Full Report (CLI full-run)
-{
-  "extracted": {
-    "invoice_id": "AUFNR123456",
-    "buyer_name": "Softwareunternehmen",
-    "seller_name": "Unternehmen für Computerteile",
-    "total_amount": 216.0,
-    "tax_amount": 41.04,
-    "total_with_tax": 257.04,
-    "currency": "EUR",
-    "line_items": []
-  },
-  "result": {
-    "invoice_id": "AUFNR123456",
-    "valid": true,
-    "errors": []
-  },
-  "summary": {
-    "total_invoices": 1,
-    "valid_invoices": 1,
-    "invalid_invoices": 0,
-    "missing_count_by_field": {}
-  }
-}
-
-🧩 Limitations & Future Improvements
-
-Line item extraction is currently heuristic and can be improved with:
-
-Better table detection
-
-Layout-aware parsing
-
-Non-invoice PDFs return many missing-field errors (can be extended to detect non-invoices)
-
-No persistence layer yet (no DB) — all outputs are file-based
-
-No authentication/authorization on API (can be added if needed)
-
-Possible future extensions:
-
-React or Next.js dashboard consuming this API
-
-Database (PostgreSQL) for storing historical invoice validation results
-
-Background processing with Celery / RQ
-
-Webhooks / email notifications on invalid invoices
+4. Response:
+   invoice-qc-service\screenshots\response.jpg
 
 👤 Author
 
@@ -276,5 +212,3 @@ Name: Sarthak Sharma
 Role: Final-year CSE student
 Context: Internship assignment — DeepLogicAI (Dec 2025)
 Project: Invoice QC Service (Extraction + Validation)
-
->>>>>>> 04d61581c035f2a4fe41b55cc3c5452b41a94e0f
