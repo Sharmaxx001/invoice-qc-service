@@ -1,16 +1,87 @@
-# React + Vite
+# 🚀 Invoice QC Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clean, responsive React + Tailwind interface for the **Invoice QC Service**.  
+Enables PDF upload, real-time validation, and clear visualization of invoice extraction results.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Features
 
-## React Compiler
+- 📄 Upload PDF invoices and validate instantly
+- 🔍 Displays extracted fields, errors, and summary
+- 🎨 Styled with Tailwind CSS
+- ⚡ Built using Vite for fast development
+- 🔗 Fully integrated with FastAPI backend
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 18 (Vite)
+- Tailwind CSS
+- Axios
+- Lucide Icons
+
+---
+
+## 📦 Installation
+
+```bash
+# Navigate into the frontend folder
+cd invoice-qc-frontend
+
+# Install dependencies
+npm install
+
+🎨 Tailwind Setup
+
+index.css
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+tailwind.config.js
+        export default {
+            content: ["./index.html", "./src/**/*.{js,jsx}"],
+             theme: { extend: {} },
+            plugins: [],
+        };
+
+🔗 Configure Backend API URL
+
+Update your Axios client:
+
+    export const API_BASE_URL = "http://localhost:8000";
+
+▶️ Run the App
+        npm run dev
+
+Open:
+    http://localhost:5173
+
+📁 Project Structure
+
+invoice-qc-frontend/
+ ├── public/
+ ├── src/
+ │   ├── api/
+ │   ├── components/
+ │   ├── pages/
+ │   ├── assets/
+ │   ├── App.jsx
+ │   ├── main.jsx
+ │   ├── index.css
+ ├── package.json
+ ├── tailwind.config.js
+ ├── vite.config.js
+
+
+🤝 Backend Integration
+
+The frontend connects to the FastAPI backend endpoints:
+
+    POST /extract-and-validate-pdf
+    POST /validate-json
+
+Backend folder: invoice-qc-service/src/api.py
+```
