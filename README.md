@@ -398,15 +398,3 @@ Role: Final-year CSE student
 Context: Internship assignment — DeepLogicAI (Dec 2025)
 Project: Invoice QC Service (Extraction + Validation)
 
-
-Now:
-
-1. Create `README.md` in your project root.  
-2. Paste this entire block.  
-3. Save.  
-
-Then tell me what you want next:  
-- demo video script,  
-- frontend UI,  
-- or polishing anything else.
-::contentReference[oaicite:0]{index=0}
