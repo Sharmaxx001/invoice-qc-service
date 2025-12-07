@@ -26,27 +26,26 @@ Enables PDF upload, real-time validation, and clear visualization of invoice ext
 
 ## 📦 Installation
 
+```bash
 # Navigate into the frontend folder
-
 cd invoice-qc-frontend
 
 # Install dependencies
-
 npm install
 
 🎨 Tailwind Setup
 
 index.css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
 
 tailwind.config.js
-export default {
-content: ["./index.html", "./src/**/*.{js,jsx}"],
-theme: { extend: {} },
-plugins: [],
-};
+        export default {
+            content: ["./index.html", "./src/**/*.{js,jsx}"],
+             theme: { extend: {} },
+            plugins: [],
+        };
 
 🔗 Configure Backend API URL
 
@@ -55,26 +54,27 @@ Update your Axios client:
     export const API_BASE_URL = "http://localhost:8000";
 
 ▶️ Run the App
-npm run dev
+        npm run dev
 
 Open:
-http://localhost:5173
+    http://localhost:5173
 
 📁 Project Structure
 
 invoice-qc-frontend/
-├── public/
-├── src/
-│ ├── api/
-│ ├── components/
-│ ├── pages/
-│ ├── assets/
-│ ├── App.jsx
-│ ├── main.jsx
-│ ├── index.css
-├── package.json
-├── tailwind.config.js
-├── vite.config.js
+ ├── public/
+ ├── src/
+ │   ├── api/
+ │   ├── components/
+ │   ├── pages/
+ │   ├── assets/
+ │   ├── App.jsx
+ │   ├── main.jsx
+ │   ├── index.css
+ ├── package.json
+ ├── tailwind.config.js
+ ├── vite.config.js
+
 
 🤝 Backend Integration
 
@@ -84,7 +84,4 @@ The frontend connects to the FastAPI backend endpoints:
     POST /validate-json
 
 Backend folder: invoice-qc-service/src/api.py
-
-```
-
 ```
