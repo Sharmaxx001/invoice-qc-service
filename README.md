@@ -16,6 +16,47 @@ It simulates a real-world system used in Accounts Payable automation workflows.
 - Exposes a REST API (FastAPI) for automation
 - Generates summary validation reports
 
+'''
+Hello,
+
+Please find my completed submission for the DeepLogic AI Invoice QC Assignment.
+
+GitHub Repository:
+https://github.com/Sharmaxx001/invoice-qc-service
+
+✔ Core Requirements Implemented
+• PDF Invoice Extraction using pdfplumber  
+• Rule-based Invoice Validation (required fields, totals, tax checks, line-item validation)  
+• Batch summary with missing-field statistics  
+• Complete CLI tool with:
+
+- extract
+- validate
+- full-run  
+  • FastAPI backend with:
+- /validate-json
+- /extract-and-validate-pdf
+- /health  
+  • JSON report generation saved in `/reports/`  
+  • Project fully tested with sample PDFs
+
+✔ Additional Work Beyond Requirements
+I also began building a **dedicated frontend UI** for the project using React + Tailwind to display validation results and allow PDF uploads.
+
+Due to time constraints, I could not complete the frontend fully; however:
+• The project structure is ready  
+• Basic UI screens are implemented  
+• API integration attempts were started
+
+I plan to complete and refine the UI after the assignment submission because I’m genuinely interested in extending this project to a production-quality tool.
+
+This submission includes all required backend functionality, the CLI interface, validation engine, extraction pipeline, and comprehensive documentation.
+
+Thank you for reviewing my work.
+Regards,  
+Sarthak Sharma
+'''
+
 ⭐ 2. Schema & Validation Design
 
 📌 Invoice Fields Chosen
