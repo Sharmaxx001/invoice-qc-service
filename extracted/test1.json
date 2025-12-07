@@ -1,0 +1,11 @@
+{
+    "invoice_id": "AUFNR34343",
+    "invoice_date": "",
+    "buyer_name": "Beispielname Unternehmen",
+    "seller_name": "Beispielname Unternehmen",
+    "total_amount": 64.0,
+    "tax_amount": 12.16,
+    "total_with_tax": 76.16,
+    "currency": "EUR",
+    "line_items": []
+}
